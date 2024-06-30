@@ -27,7 +27,7 @@ jobs:
           platforms: linux/amd64,linux/arm64 
           push : true
           tags : lalitpatidar001/pet-adoption-frontend:latest
-          secrests: |
+          secrets: |
             "VITE_REACT_APP_SERVER_URL=${{secrests.VITE_REACT_APP_SERVER_URL}}"
 
   deploy:
