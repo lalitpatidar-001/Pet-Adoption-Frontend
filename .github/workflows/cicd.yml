@@ -1,0 +1,47 @@
+name : "Pet-Adoption-Frontend-CICD"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name : Checkout the source code
+        uses : actions/checkout@v4 
+
+      - name : Login to docker Hub
+        uses  : docker/login-action@v2  
+        with:
+          username : ${{secrets.DOCKER_USERNAME}}
+          password : ${{secrets.DOCKER_PASSWORD}}
+
+      - name : Set up Docker Buildx
+        uses : docker/setup-buildx-action@v3
+
+      - name : Build and Deploy
+        uses : docker/build-push-action@v6
+        with :
+          platforms: linux/amd64,linux/arm64 
+          push : true
+          tags : lalitpatidar001/pet-adoption-frontend:latest
+          secrests: |
+            "VITE_REACT_APP_SERVER_URL=${{secrests.VITE_REACT_APP_SERVER_URL}}"
+
+  deploy:
+    needs : build
+    runs-on : ubuntu-latest
+    steps :
+      - name : Pull images from docker Hub
+        run  : sudo docker pull lalitpatidar001/pet-adoption-frontend:latest
+      
+      - name : Stop existing container if exists
+        run  : sudo docker stop pet-adoption-frontend-container || true
+      
+      - name : Remove existing container if exists || true
+        run  : sudo docker rm pet-adoption-frontend-container || true
+      
+      - name : Run docker container
+        run  : sudo docker run -d --name pet-adoption-frontend-container -p 5173:5173 lalitpatidar001/pet-adoption-frontend:latest
