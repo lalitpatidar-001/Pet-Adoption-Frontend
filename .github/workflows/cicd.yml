@@ -32,7 +32,7 @@ jobs:
 
   deploy:
     needs : build
-    runs-on : self-hosted``
+    runs-on : self-hosted
     steps :
       - name : Pull images from docker Hub
         run  : sudo docker pull lalitpatidar001/pet-adoption-frontend:latest
