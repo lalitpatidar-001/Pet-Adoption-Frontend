@@ -5,7 +5,7 @@ import axios from 'axios';
 export const urlPath =   import.meta.env.VITE_REACT_APP_SERVER_URL || "http://localhost:4000"
 
 const axiosInstance = axios.create({
-  baseURL: `${urlPath}/api`, // Base URL for all requests
+  baseURL: `${urlPath}/api`, // Base URL for all requestss
   headers: {
     'Content-Type': 'application/json',
   },
