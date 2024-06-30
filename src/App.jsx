@@ -13,7 +13,7 @@ import DonateUs from './pages/DonateUs';
 
 function App() {
   const { User, setUser } = useContext(userContext);
-console.log("envss ",import.meta.env.VITE_REACT_APP_SERVER_URL);
+console.log("envsss ",import.meta.env.VITE_REACT_APP_SERVER_URL);
   const PublicRoute = ({ element }) => {
     return User ? <Navigate to="/" /> : element;
   };
