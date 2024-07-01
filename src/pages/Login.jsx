@@ -1,7 +1,14 @@
 import  { useContext, useState ,useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { userContext } from '../context/UserContextProvider';
-import axiosInstance from '../axios';
+import axiosInstance, { urlPath } from '../axios';
+import google_icon from "../assets/google-icon.png"
+import Inputbox from '../shared/Inputbox';
+import ButtonPrimary from '../shared/ButtonPrimary';
+import {toast} from "react-hot-toast"
+import cover_photo from "../assets/cover-photo.jpg"
+import AuthHeader from '../shared/AuthHeader';
+import AuthActions from '../shared/AuthActions';
 const initialValue = {
     email: "",
     password: ""
@@ -17,10 +24,8 @@ function Login() {
         const urlParams = new URLSearchParams(window.location.search);
         const user = urlParams.get('user');
         if (user) {
-            console.log(user)
+            // get user data if redirected from oauth authentication.
             getUser();
-            alert("redirecting...")
-            console.log("redirecting....")
         }
     },[]);
 
@@ -39,7 +44,6 @@ function Login() {
             }
           }catch(error){
             console.log(error);
-
           }
         }
 
@@ -58,7 +62,6 @@ function Login() {
         try {
             const response = await axiosInstance.post("/auth/login", userData)
             if (response.status === 200) {
-                console.log("rannn")
                 let userId = response.data.sendData?._id;
                 localStorage.setItem("user-data", JSON.stringify(userId));
                 userId = userId.replace(/"/g, '');
@@ -69,9 +72,10 @@ function Login() {
         catch (error) {
             console.log(error);
             if (error.response && error.response.data.msg) {
-                setError(error.response.data.msg);
+                // setError(error.response.data.msg);
+                toast.error(error.response.data.msg)
             } else {
-                setError("Something went wrong");
+                toast.error("Something went wrong");
             }
         }
         finally {
@@ -79,40 +83,75 @@ function Login() {
         }
     }
 
+    // oauth click handler
     const handleClickAuthLogin=(provider)=>{
-        window.open(`http://localhost:4000/api/auth/${provider}`, "_self");
+        window.open(`${urlPath}/api/auth/${provider}`, "_self");
     }
 
     return (
-        <div className='flex items-center justify-center h-[100vh] w-[100vw] bg-[#dddddd]'>
-            <div className='flex flex-col gap-[20px] bg-white w-fit h-fit p-8 rounded '>
-                <h1 className='text-3xl'>Login here</h1>
+        <div className="flex items-center  justify-center h-screen bg-[#dddddd]">
+            <div className="flex items-center max-w-[600px] justify-center md:h-1/2  ">
+
+                <div className="flex-1 bg-blue-300  rounded-l-lg overflow-hidden">
+                        <img className="h-[405px]  w-full" src={cover_photo} alt="cover_photo"/>
+                </div>
+
+                <div className='flex flex-1 flex-col  gap-[20px] bg-white w-fit h-fit p-4 py-9 rounded-r-lg '>
+
+                <AuthHeader
+                    heading="Login to Pet-Adoption"
+                    message="Welcome back, please enter credentials"
+                />
+
+                
 
                 {/* api error feedback  */}
                 <span className='feedback text-red-500 text-semibold'>{error}</span>
 
                 <form onSubmit={handleSubmitSignIn} className='flex flex-col gap-3 '>
 
-                    <input required className='p-2 border-b-2 outline-none' type="email" placeholder='enter email'
-                        name='email' value={userData.email} onChange={handleUserData} />
+                <Inputbox
+                type="email"
+                 placeholder="example@gmail.com"
+                 name="email"
+                 value={userData.email} 
+                 onChange={handleUserData}
 
-                    <input required className='p-2 border-b-2  outline-none' type='password' placeholder='enter password'
-                        name='password' value={userData.password} onChange={handleUserData} />
+                />
+                <Inputbox
+                type="password"
+                 placeholder="Enter password"
+                 name="password"
+                 value={userData.password} 
+                 onChange={handleUserData}
 
+                />
 
-                    <button disabled={isLoading} className={`p-2 px-4 border-none bg-[#5551FF] rounded text-white font-semibold w-fit ${isLoading && "bg-[#a9a8e9]"}`} type='submit'>
-                        {isLoading ? "wait..." : "Sign In"}
-                    </button>
+            <ButtonPrimary
+            isLoading={isLoading}
+            title="Sign In"
+            type="submit"
+            />
+
 
                     {/* page toggle for new user */}
-                    <span>New user? <Link to="/register"><span className='text-[#5551FF]'>Register here</span></Link></span>
+
+                    <AuthActions
+                    path="/register"
+                    message="New user?"
+                    text="Register here"
+                    />
                 </form>
-                <div className="flex gap-2 justify-between">
-                    <div onClick={()=>handleClickAuthLogin("google")}>Google</div>
-                    <div onClick={()=>handleClickAuthLogin("github")}>Github</div>
-                    {/* <div onClick={()=>handleClickAuthLogin("linkedin")}>linkedin</div> */}
+
+                <div className="flex gap-2 justify-between p-2 w-full shadow-sm shadow-[#101010] drop-shadow-lg drop-shadow-black rounded-lg">
+                    <div onClick={()=>handleClickAuthLogin("google")}
+                         className="flex justify-start gap-3 items-center w-full">
+                        <img className="h-5 w-5" src={google_icon} alt="google icon"/>
+                        <span className="text-[#101010] cursor-pointer text-[14px] font-semibold hover:text-blue-600">Sign In With Google</span>
+                    </div>
                 </div>
 
+            </div>
             </div>
         </div>
     )
