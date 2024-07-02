@@ -55,7 +55,7 @@ const Messages = () => {
         if (currentChat) getMessages();
     }, [currentChat])
     return (
-        <div className='flex flex-col gap-2 flex-grow bg-[#dddddd] overflow-y-scroll p-1'>
+        <div className='flex flex-col gap-2 flex-grow bg-[#dddddd] overflow-y-scroll p-1 '>
             {
                 messages?.map((message) => (
                     <>

@@ -46,16 +46,20 @@ function Home() {
   return (
     <>
       {/* <Navbar page="home"/> */}
-      <div className={`flex justify-between bg-[#dddddd] gap-[5px] w-[100vw] p-2  top-0 `}>
-        {isCreateOpened && <BlackScreen isCreateOpened={isCreateOpened} setIsCreateOpened={setIsCreateOpened} />}
+      <div className={`flex justify-between  gap-[2px] w-[100vw]  py-1 sm:pl-0 pl-[1px]  top-0 `}>
+        {/* {isCreateOpened && <BlackScreen isCreateOpened={isCreateOpened} setIsCreateOpened={setIsCreateOpened} />}
         {isCreateOpened &&
           <CreatePost
             isCreateOpened={isCreateOpened} setIsCreateOpened={setIsCreateOpened}
             isPostLoading={isPostLoading} setIsPostLoading={setIsPostLoading}
-          />}
+          />} */}
 
-        <SideBar
-          isCreateOpened={isCreateOpened} setIsCreateOpened={setIsCreateOpened} />
+          
+
+        {/* <SideBar
+          isCreateOpened={isCreateOpened} setIsCreateOpened={setIsCreateOpened} /> */}
+
+          
 
         {isPostLoading ? <span>Loading...</span> : <Pets />}
         

@@ -27,9 +27,9 @@ const Applicant = () => {
         getAllAplicants();
     }, [User])
     return (
-        <div className='flex  '>
-            <SideBar />
-            <div className='flex-[6] flex flex-col gap-1 bg-[#dddddd] p-2'>
+        <div className='flex  w-full'>
+            {/* <SideBar /> */}
+            <div className=' flex flex-col w-full gap-1 bg-[#dddddd] p-2'>
                 {
                     applicants?.map((applicant) => (
                         <ApplicantCard key={applicant._id} {...applicant} />

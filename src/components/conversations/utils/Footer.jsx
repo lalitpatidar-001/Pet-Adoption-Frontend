@@ -79,7 +79,7 @@ const Footer = () => {
         }
     }
     return (
-        <div className=' bg-white flex gap-3 items-center py-2 p-2 w-full relative '>
+        <div className=' bg-white flex gap-3 items-center py-2 p-2 w-full relative bg-red-300'>
             {imageMessage && <ImagePreview setImageMessage={setImageMessage} image={imageMessage} />}
             <input className='hidden' id="image-input" name="messageImage" onChange={handleChangeImageMessageInput} type='file' />
             <label htmlFor='image-input' className="text-gray-700 cursor-pointer">

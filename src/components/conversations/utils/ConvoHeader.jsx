@@ -3,11 +3,12 @@ import Avatar from '../../chats/Avatar'
 import { useDispatch, useSelector } from 'react-redux'
 import { userContext } from '../../../context/UserContextProvider';
 import { setToUser } from '../../../redux/slices/messageSlice';
+import { setCurrentChat } from '../../../redux/slices/chatSlice';
 const ConvoHeader = () => {
     const { toUser } = useSelector(state => state.message);
     //     const {User} = useContext(userContext)
     //     const {currentChat} = useSelector(state=>state.chat);
-    //     const dispatch = useDispatch();
+        const dispatch = useDispatch();
 
     //     const getToUser = (members) => {
     //       const oppenentUserData = members?.filter((member) => User !== member._id);
@@ -23,11 +24,17 @@ const ConvoHeader = () => {
     //       }
     //     },[currentChat,toUser])
 
+    const handleConverstionBack =()=>{
+        dispatch(setCurrentChat({data:null}))
+    }
 
 
     return (
         <div className='flex items-center bg-white pl-2 min-h-[65px]  shadow-sm border-b-2'>
             <div className='flex gap-2 '>
+                <div onClick={handleConverstionBack} className="sm:hidden">
+                    back
+                </div>
                 <Avatar profileImage={toUser?.profileImage} />
                 <div className='flex flex-col '>
                     <span className='font-semibold'>

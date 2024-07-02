@@ -91,14 +91,11 @@ function PetInfo() {
     }
 
     return (
-        <div className='flex'>
-            {/* <Navbar /> */}
-            {/* container */}
-            <SideBar page="profile" />
+  
             <div className='flex flex-[7] justify-center bg-[#dddddd] p-2 '>
                 {/* wrapper */}
 
-                <div className='w-full  flex p-4 bg-white h-[calc(100vh-66px)] items-center relative '>
+                <div className='w-full  flex flex-col-reverse lg:flex-row p-4 bg-white items-center relative '>
 
 
                     <Link to='/'>
@@ -107,13 +104,13 @@ function PetInfo() {
                         </div>
                     </Link>
 
-                    <div className=' flex-1 p-4 flex flex-col justify-between h-[70vh]'>
+                    <div className=' flex-1 p-4 flex flex-col justify-between '>
                         <div >
                             <div className='flex justify-between'>
                                 <h1 className='text-2xl font-bold '>{postData.name}  ({postData.type})</h1>
 
                             </div>
-                            <div className='flex justify-between items-center'>
+                            <div className='flex sm:flex-row flex-col justify-between sm:items-center'>
                                 <div>
                                     <span className='text-xl text-[gray]  '>Gender : </span>
                                     <span className='text-xl'>{postData.gender}</span>
@@ -163,7 +160,6 @@ function PetInfo() {
                     </div>
                 </div>
             </div>
-        </div>
     )
 }
 

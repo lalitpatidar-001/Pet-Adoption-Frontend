@@ -70,7 +70,9 @@ function Filters({onFilterChange , setIsPostLoading}) {
   console.log("rendering filters")
     return (
         // container
-        <div className='flex-[3] bg-white shadow-md h-[calc(100vh-8px)] overflow-y-scroll sticky top-[8px] ' >
+        <div className='flex-[3]  bg-white shadow-md h-[calc(100vh-8px)] overflow-y-scroll sticky top-[4px] 
+        hidden md:block
+        ' >
             {/* wrapper */}
             <div className='flex flex-col'>
                 <div className='border-b-2'>

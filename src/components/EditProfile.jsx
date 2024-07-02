@@ -11,7 +11,7 @@ const initialState ={
     address: "",
     dob: "",
 }
-function EditProfile({ isEditClicked, setIsEditClicked,id }) {
+function EditProfile({ id,handleClose }) {
     console.log("iddd",id)
     const [isLoading, setIsLoading] = useState(false);
     const [profileImage, setprofileImage] = useState(null);
@@ -41,6 +41,7 @@ function EditProfile({ isEditClicked, setIsEditClicked,id }) {
             // reseting data
             setprofileImage(null);
             setDetails(initialState);
+            handleClose(true)
 
 
 
@@ -48,7 +49,7 @@ function EditProfile({ isEditClicked, setIsEditClicked,id }) {
             console.error('Error updating user profile:', error);
         }
         finally {
-            setIsEditClicked(false)
+            // setIsEditClicked(false)
         }
     };
 
@@ -57,18 +58,16 @@ function EditProfile({ isEditClicked, setIsEditClicked,id }) {
         setDetails((prev) => ({ ...prev, [name]: value }));
     };
 
+    if(isLoading) return <span>Loading...</span> 
+
     return (<>
 
-
-        {isLoading ? <span>Loading...</span> :
-
-            <div className='absolute top-0 left-1/4 right-1/4 transform lg:min-w-[800px]  w-fit   p-4 bg-white  h-fit flex items-center justify-center  z-50 ' >
-                <div className='absolute  top-0 right-0 cursor-pointer ' onClick={() => setIsEditClicked(false)}>
-                    <CancelIcon />
-                </div>
+            <div className='  w-full overflow-y-auto  px-4 py-1 bg-white  h-fit flex items-center justify-center   ' >
+               
 
                 <form encType="multipart/form-data"
-                    onSubmit={handleProfileChangeSubmit} className='w-[60%] flex flex-col gap-4 items-start justify-center  '>
+                    onSubmit={handleProfileChangeSubmit} 
+                    className='w-full flex flex-col gap-4 items-start justify-center   '>
                     <div className='flex flex-col relative items-center self-center '>
                         {profileImage && <button className='absolute top-0 right-0' onClick={() => setprofileImage(null)}><CancelIcon /></button>}
                         <label className='bg-[#dddddd]  p-2 h-[150px] w-[150px] flex items-center justify-center rounded-[50%] font-semibold cursor-pointer overflow-hidden' htmlFor="choose-image">
@@ -129,9 +128,15 @@ function EditProfile({ isEditClicked, setIsEditClicked,id }) {
                         </div>
                     </div>
 
+                    <div className="flex gap-4 justify-around w-full">
+                    <button type='button' onClick={handleClose} className='bg-red-400 text-white px-8 py-1 rounded font-semibold cursor-pointer self-center'>Cancel</button>
                     <button type='submit' className='bg-[#1877F2] text-white px-8 py-1 rounded font-semibold cursor-pointer self-center'>Update</button>
+                    </div>
+
+
+                    
                 </form>
-            </div>}
+            </div>
 
     </>
     );

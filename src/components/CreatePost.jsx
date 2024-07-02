@@ -7,7 +7,7 @@ import { updatePets } from '../redux/slices/petSlice';
 import axiosInstance, { urlPath } from '../axios';
 
 
-function CreatePost({ isCreateOpened, setIsCreateOpened, setIsPostLoading }) {
+function CreatePost({  handleClose,setIsPostLoading }) {
   const { User } = useContext(userContext);
   const dispatch = useDispatch();
   const [isNoFeeChecked, setIsNoFeeChecked] = useState(false);
@@ -37,7 +37,7 @@ function CreatePost({ isCreateOpened, setIsCreateOpened, setIsPostLoading }) {
     postData.append('isNoFee', isNoFeeChecked);
     console.log(postData);
     try {
-      setIsPostLoading(true)
+      // setIsPostLoading(true)
       const response = await axios.post(`${urlPath}/api/post/createpost/${User}`, postData,
         {
           headers:{
@@ -79,11 +79,9 @@ function CreatePost({ isCreateOpened, setIsCreateOpened, setIsPostLoading }) {
 
 
   return (
-    <div className='absolute z-40 w-[500px] h-fit top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white flex p-8 justify-center rounded'>
-      <div className='absolute top-0 right-0 cursor-pointer' onClick={() => setIsCreateOpened(false)}>
-        <CancelIcon />
-      </div>
-      <form onSubmit={handlePostSubmit} encType="multipart/form-data" className='flex flex-col gap-4 items-center'>
+    <div className=' w-[90%] h-fit  bg-white flex p-8 justify-center rounded'>
+      
+      <form onSubmit={handlePostSubmit} encType="multipart/form-data" className='flex flex-col px-2 gap-4 items-center'>
         <div className='flex flex-col relative items-center'>
           {image && (
             <button className='absolute top-0 right-0' onClick={() => setImage(null)}>
@@ -100,8 +98,8 @@ function CreatePost({ isCreateOpened, setIsCreateOpened, setIsPostLoading }) {
           <input className='w-[1px] h-[1px]' name='postImage' required type='file' id='choose-image' onChange={(e) => setImage(e.target.files[0])} />
 
         </div>
-        <div className='flex gap-[10px]'>
-          <div>
+        <div className='flex gap-[10px] flex-col sm:flex-row '>
+          <div className="flex items-center justify-between w-full gap-3">
             <label htmlFor='name'>Name </label>
             <input
               className='border-2 p-1 rounded'
@@ -113,7 +111,7 @@ function CreatePost({ isCreateOpened, setIsCreateOpened, setIsPostLoading }) {
               placeholder='enter pet name'
             />
           </div>
-          <div>
+          <div className="flex items-center justify-between w-full gap-3">
             <label htmlFor='type'>Type </label>
             <input
               className='border-2 p-1 rounded'
@@ -126,8 +124,8 @@ function CreatePost({ isCreateOpened, setIsCreateOpened, setIsPostLoading }) {
             />
           </div>
         </div>
-        <div className='flex gap-[10px]'>
-          <div>
+        <div className='flex gap-[10px] flex-col sm:flex-row'>
+          <div className="flex items-center justify-between w-full gap-3">
             <label htmlFor='breed'>Breed </label>
             <input
               className='border-2 p-1 rounded'
@@ -139,7 +137,7 @@ function CreatePost({ isCreateOpened, setIsCreateOpened, setIsPostLoading }) {
               placeholder='enter pet breed'
             />
           </div>
-          <div>
+          <div className="flex items-center justify-between w-full gap-3">
             <label htmlFor='age'>Age </label>
             <input
               className='border-2 p-1 rounded'
@@ -152,7 +150,7 @@ function CreatePost({ isCreateOpened, setIsCreateOpened, setIsPostLoading }) {
             />
           </div>
         </div>
-        <div className='flex gap-[75px] w-full justify-around '>
+        <div className='flex sm:gap-[75px] flex-col sm:flex-row w-full justify-around '>
           <div className='flex flex-col gap-2 self-start'>
             <label htmlFor='gender'>Gender</label>
             <div className='flex flex-col justify-center pl-9 gap-1'>
@@ -206,12 +204,21 @@ function CreatePost({ isCreateOpened, setIsCreateOpened, setIsPostLoading }) {
             </div>
           </div>
         </div>
+        <div className="w-full flex justify-around">
+        <button
+          onClick={handleClose}
+          type="button"
+          className='bg-red-400 text-white px-8 py-1 rounded font-semibold cursor-pointer'
+        >
+          Cancel
+        </button>
         <button
           type='submit'
           className='bg-[#1877F2] text-white px-8 py-1 rounded font-semibold cursor-pointer'
         >
           Post
         </button>
+        </div>
       </form>
     </div>
   );

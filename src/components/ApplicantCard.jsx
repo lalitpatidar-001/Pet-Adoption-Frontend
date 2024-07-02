@@ -25,7 +25,7 @@ const ApplicantCard = ({ _id, createdAt, owner, status, pet, requester }) => {
         }
     }
     return (
-        <div className='bg-white flex justify-between items-center p-2 shadow-xl rounded '>
+        <div className='bg-white flex flex-col gap-1 lg:gap-0 lg:flex-row  justify-between lg:items-center p-2 shadow-xl rounded '>
             <div className='flex flex-col justify-start'>
                 <h2 className='text-xl font-semibold text-gray-500'>{requester.username} {status === "adopted" ?"had":"has"} sent request to adopt your {pet.type}</h2>
                 <div className='flex gap-3 items-center'>
@@ -37,8 +37,8 @@ const ApplicantCard = ({ _id, createdAt, owner, status, pet, requester }) => {
             </div>
             {status !== "adopted" &&
                 <div className='flex gap-2'>
-                    <button className='bg-red-500 text-white font-bold rounded border-none px-2 py-1'>Reject Adoption</button>
-                    <button className='bg-blue-500 text-white font-bold rounded border-none px-2 py-1' onClick={handleAcceptRequest}>Accept Adoption</button>
+                    <button className='sm:text-[16px] text-12px bg-red-500 text-white font-bold rounded border-none px-2 py-1'>Reject Adoption</button>
+                    <button className='sm:text-[16px] text-12px bg-blue-500 text-white font-bold rounded border-none px-2 py-1' onClick={handleAcceptRequest}>Accept Adoption</button>
                 </div>
             }
             {status === "adopted" &&
