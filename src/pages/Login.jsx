@@ -92,7 +92,7 @@ function Login() {
         <div className="flex items-center  justify-center h-screen bg-[#dddddd]">
             <div className="flex items-center max-w-[600px] justify-center md:h-1/2  ">
 
-                <div className="flex-1 bg-blue-300  rounded-l-lg overflow-hidden">
+                <div className="flex-1 bg-blue-300 hidden sm:block  rounded-l-lg overflow-hidden">
                         <img className="h-[405px]  w-full" src={cover_photo} alt="cover_photo"/>
                 </div>
 

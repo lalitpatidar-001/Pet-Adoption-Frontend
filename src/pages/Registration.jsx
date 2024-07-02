@@ -7,6 +7,7 @@ import cover_photo from "../assets/cover-registration.jpg"
 import Inputbox from '../shared/Inputbox';
 import ButtonPrimary from '../shared/ButtonPrimary';
 import AuthActions from '../shared/AuthActions';
+import AuthHeader from '../shared/AuthHeader';
 function Registration() {
     const navigate = useNavigate();
 
@@ -28,25 +29,22 @@ function Registration() {
 
     const handleSubmitSignUp = async (e) => {
         e.preventDefault();
-        setIsLoading(true);
-
         try {
+            setIsLoading(true);
             const response = await axiosInstance.post('/auth/register/', userData);
-            setIsLoading(false);
-            console.log(response.data);
             if (response.status === 201) {
                 toast.success("User Registered Successfully");
                 navigate("/login");
             }
-
         }
         catch (error) {
-            setIsLoading(false);
             if (error.response && error.response.data.msg ) {
                 toast.error(error.response.data.msg)
             } else {
                  toast.error("Something went wrong");
             }
+        }finally{
+            setIsLoading(false)
         }
     }
 
@@ -56,11 +54,16 @@ function Registration() {
             {/* wrapper */}
          <div className="flex  max-w-[650px] ">
 
-         <div className="flex-1 rounded-l-lg overflow-hidden">
+         <div className="flex-1 hidden sm:block rounded-l-lg overflow-hidden">
 <img className="h-[464px]" src={cover_photo}/>
           </div>
-          <div className='flex flex-1 flex-col gap-[20px] bg-white  h-fit p-3 py-8  rounded-r-lg '>
-                <h1 className='text-3xl '>Register here</h1>
+          <div className='flex flex-1 flex-col h-[] gap-[20px] bg-white  sm:p-3 p-4 w-full sm:w-[300px] py-8  rounded-r-lg '>
+
+                <AuthHeader
+                heading="Register to Pet-Adoption"
+                message="Welcome, fill details to create account"
+                />
+                {/* <h1 className='text-3xl '>Register here</h1> */}
                 <form onSubmit={handleSubmitSignUp} className='flex flex-col gap-3 '>
 
                     <Inputbox
