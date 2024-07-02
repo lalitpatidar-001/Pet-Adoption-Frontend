@@ -17,10 +17,12 @@ import Wishlists from '../components/profile/Wishlists';
 import axiosInstance, { STATIC_PATH } from '../axios';
 import {toast} from "react-hot-toast"
 import {useNavigate} from "react-router-dom";
+import EditProfileModel from '../components/models/EditProfileModel';
 const dumyUrl = "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=600";
 
 function Profile() {
     const { id } = useParams();
+    const [isEditProfileModelOpen , setIsEditProfileModelOpen] = useState(false)
     const [userPosts, setUserPosts] = useState([]);
     const { User, setUser } = useContext(userContext);
     const [userData, setUserData] = useState("");
@@ -119,32 +121,25 @@ function Profile() {
         // container
         <>
             {isLoading ? <span>Loading...</span> :
-                <div className='flex relative overflow-hidden '>
+                <div className='flex relative overflow-hidden w-full'>
 
-                    {isEditClicked && <BGCreatePost isEditClicked={isEditClicked} setIsEditClicked={setIsEditClicked} />}
+                    
 
-                    <SideBar page="profile" />
-
-                    {isEditClicked && <>
-                        <EditProfile isEditClicked={isEditClicked} setIsEditClicked={setIsEditClicked} id={id}/>
-                    </>
-                    }
-
-                    <div className='flex  flex-col flex-[5]  items-center bg-[#dddddd]  min-h-[100vh] p-2'>
+                    <div className='flex  flex-col  w-full items-center bg-[#dddddd]  min-h-[100vh] p-2'>
                         {/* wrapper */}
 
                         <div className='  bg-white p-4 flex flex-col items-center w-full '>
                             {/* profile */}
                             <div className='flex p-5 pl-5 lg:gap-[40px] justify-center ' >
 
-                                <img className='w-[100px] h-[100px] rounded-[50%]' src={profileImageURL?
+                                <img className='sm:w-[100px] sm:h-[100px] h-[60px] w-[60px] rounded-[50%]' src={profileImageURL?
                                     profileImageURL : dumyUrl} alt="profile-image" />
 
-                                <div className='px-4 py-2 flex flex-col'>
+                                <div className='sm:px-4 px-2 py-2 flex flex-col'>
                                     <h1 className='text-xl font-semibold'>{userData.username}</h1>
                                     <span className='font-semibold'>{userPosts.length}post</span>
                                     {userData._id === User &&
-                                        <span onClick={() => setIsEditClicked(!isEditClicked)} className=' mt-2 font-bold rounded text-center cursor-pointer bg-[#dddddd]'>Edit Profile</span>
+                                        <span onClick={() => setIsEditProfileModelOpen(!isEditClicked)} className=' mt-2 font-bold rounded text-center cursor-pointer bg-[#dddddd]'>Edit Profile</span>
                                     }
                                 </div>
                                 {/* options */}
@@ -165,7 +160,17 @@ function Profile() {
                             </div>
                         </div>
                     </div>
-                </div>}
+
+
+                    <EditProfileModel
+                    id={id}
+                    isEditProfileModelOpen={isEditProfileModelOpen}
+                    setIsEditProfileModelOpen={setIsEditProfileModelOpen}
+                    />
+                </div>
+                
+                }
+
         </>
     )
 }

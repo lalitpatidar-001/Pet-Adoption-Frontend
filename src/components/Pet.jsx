@@ -83,10 +83,13 @@ function Pet({ _id, name, type, breed, age, gender, price, isNoFee, userId, imag
   };
 
   return (
-    <div className='w-full h-[95vh] flex flex-col p-1 shadow-lg bg-white border-1 border-[#bfbdbd] pb-2'>
-      <div className='flex p-2 justify-between items-center'>
+    <div className='w-full h-fit flex flex-col p-1 shadow-lg bg-white border-1 border-[#bfbdbd] pb-2'>
+
+      {/* header */}
+      <div className='flex flex-1 px-2 py-[2px] justify-between items-center'>
+        {/* user details */}
         <div className='flex gap-2'>
-          <img className='w-[50px] h-[50px] overflow-hidden rounded-[50%]' src={profileURL} alt="profile-image" />
+          <img className='w-[40px] h-[40px] overflow-hidden rounded-[50%]' src={profileURL} alt="profile-image" />
           <Link to={`/profile/${userId._id}`}>
             <h1 className=' cursor-pointer hover:text-blue-500 py-2 font-semibold text-xl'>{userId.username}</h1>
           </Link>
@@ -96,8 +99,10 @@ function Pet({ _id, name, type, breed, age, gender, price, isNoFee, userId, imag
           {isMenuOpen && <HorizontalOptions postId={_id} userId={userId._id} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />}
         </div>
       </div>
+
+      {/* post image */}
       <Link to={`/pet/${_id}`}>
-        <div className='h-[70vh] w-full' style={{
+        <div className='h-full max-h-[70vh] w-full' style={{
           backgroundImage: `url(${imageURL})`,
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -111,8 +116,8 @@ function Pet({ _id, name, type, breed, age, gender, price, isNoFee, userId, imag
         </div>
       </Link>
 
-
-      <div className='flex flex-col w-[100%]'>
+{/* post details */}
+      <div className='flex flex-1 flex-col w-[100%]'>
         <div className='flex justify-between'>
           <h2 className='capitalize font-bold'>
             <span className='text-[gray]'>Name:</span> {name}
@@ -121,7 +126,7 @@ function Pet({ _id, name, type, breed, age, gender, price, isNoFee, userId, imag
             <span className='text-[gray]'>Age:</span> {age} yr
           </h4>
         </div>
-        <div className='flex justify-between border-b-2'>
+        <div className=' sm:flex hidden justify-between border-b-2'>
           <span className='capitalize font-bold'>
             <span className='text-[gray]'>Type:</span> {type}({gender})
           </span>

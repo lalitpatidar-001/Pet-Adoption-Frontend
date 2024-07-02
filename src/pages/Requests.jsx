@@ -29,8 +29,6 @@ const Reqeusts = () => {
     getAllRequest();
   }, [User]);
   return (
-    <div className='flex'>
-      <SideBar />
       <div className='flex-[6] flex flex-col gap-1 bg-[#dddddd] p-2  '>
         {
           requests?.map((item) => (
@@ -38,7 +36,6 @@ const Reqeusts = () => {
           ))
         }
       </div>
-    </div>
   )
 }
 

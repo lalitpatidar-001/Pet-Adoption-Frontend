@@ -23,11 +23,19 @@ const Conversatoin = () => {
     }
   },[currentChat])
   return (
-    <div className='flex-[5] flex flex-col  h-screen'>
+    <>
+    {!currentChat?
+    <div className={`flex-[5] hidden sm:block`}>No chat</div>:
+
+    <div className={`flex-[5] flex flex-col  h-screen min-h-screen
+    ${!currentChat?"sm:flex-[5] sm:flex hidden":"flex flex-[5]"}
+    `}>
       <ConvoHeader />
       <Messages />
       <Footer />
     </div>
+}
+      </>
   )
 }
 

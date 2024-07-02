@@ -21,7 +21,7 @@ export const RequestCard = ({ _id, status, pet, owner, updatedAt }) => {
         }
     }
     return (
-        <div className='bg-white py-2 px-1 w-full rounded flex justify-between items-center shadow-xl'>
+        <div className='bg-white py-2 px-1 w-full rounded flex lg:flex-row flex-col gap-1 lg:gap-0 justify-between lg:items-center shadow-xl'>
             <div className='flex flex-col '>
                 <h2 className='text-xl font-semibold text-gray-500'>You have sent {pet.type} Adoption Request to {owner.username}</h2>
                 <span className='text-gray-400 text-sm'>{format(updatedAt)}</span>

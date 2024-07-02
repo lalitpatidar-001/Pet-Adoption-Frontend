@@ -9,8 +9,10 @@ import CreatePost from './CreatePost';
 import { userContext } from '../context/UserContextProvider';
 import axiosInstance from '../axios';
 import {toast} from "react-hot-toast"
+import CreatePostModel from './models/CreatePostModel';
 
-function SideBar({isCreateOpened ,setIsCreateOpened , page}) {
+function SideBar( {page}) {
+    const [isCreatePostModelOpen , setIsCreatePostModelOpen] = useState(false);
     const navitgate = useNavigate();
     const {User,setUser} = useContext(userContext);
 
@@ -33,67 +35,71 @@ function SideBar({isCreateOpened ,setIsCreateOpened , page}) {
 
     return (
         // container
-        <div className='flex-[2] h-[calc(100vh-10px)] sticky top-[8px] flex flex-col bg-white '>
+        <div className='sm:w-[200px]    flex h-[calc(100vh-10px)] sticky  top-[4px] sm:top[8px]  bg-white'>
             {/* wrapper */}
-            <div>
+            <div className="flex flex-col    bg-white">
                 {/* logo */}
-                <div className=' flex p-1 border-b-2 items-center gap-1'>
-                <img className='w-[50px] h-[50px]' src={logo} alt="" />
-                    <h1 className='text-xl font-bold '>Pet-Adoption</h1>
+                <div className='  flex p-1 border-b-2 items-center justify-center gap-1'>
+                <img className='w-[30px] h-[30px]' src={logo} alt="" />
+                    <h1 className='text-sm sm:block hidden font-bold '>Pet-Adoption</h1>
                 </div>
 
                 {/* menu */}
                 <Link to='/'>
-                <div className='flex gap-1 px-4 pt-5 '>
+                <div className='flex gap-1 sm:px-4 px-2 pt-5 '>
                 <HomeIcon/>
-                <span className='font-semibold'>Home</span>
+                <span className='  hidden sm:block font-semibold'>Home</span>
                 </div>
                 </Link>
 
                 <Link to={`/profile/${User}`}>
-                <div className='flex gap-1 px-4 pt-5 '>
+                <div className='flex gap-1 sm:px-4 px-2 pt-5 '>
                 <AccountBoxIcon/>
-                <span className='font-semibold'>Profile</span>
+                <span className='hidden sm:block font-semibold'>Profile</span>
                 </div>
                 </Link>
               
-                {page!=="profile" && <div onClick={()=>setIsCreateOpened(!isCreateOpened)} className='flex gap-1 px-4 pt-5 cursor-pointer '>
+                {page!=="profile" && <div onClick={()=>setIsCreatePostModelOpen(!isCreatePostModelOpen)} className='flex gap-1 sm:px-4 px-2 pt-5 cursor-pointer '>
                 <AddBoxIcon/>
-                <span className='font-semibold'>Create</span>
+                <span className='hidden sm:block font-semibold'>Create</span>
                 </div>}
 
                 <Link to={`/request/${User}`}>
-                <div className='flex gap-1 px-4 pt-5 '>
+                <div className='flex gap-1 sm:px-4 px-2 pt-5 '>
                 <AccountBoxIcon/>
-                <span className='font-semibold'>Requests</span>
+                <span className='hidden sm:block font-semibold'>Requests</span>
                 </div>
                 </Link>
                 <Link to={`/applicant/${User}`}>
-                <div className='flex gap-1 px-4 pt-5 '>
+                <div className='flex gap-1 sm:px-4 px-2 pt-5 '>
                 <AccountBoxIcon/>
-                <span className='font-semibold'>Applicants</span>
+                <span className='hidden sm:block font-semibold'>Applicants</span>
                 </div>
                 </Link>
                 <Link to={`/chat/${User}`}>
-                <div className='flex gap-1 px-4 pt-5 '>
+                <div className='flex gap-1 sm:px-4 px-2 pt-5 '>
                 <AccountBoxIcon/>
-                <span className='font-semibold'>Conversations</span>
+                <span className='hidden sm:block font-semibold'>Conversations</span>
                 </div>
                 </Link>
                 <Link to={`/donate`}>
-                <div className='flex gap-1 px-4 pt-5 '>
+                <div className='flex gap-1 sm:px-4 px-2 pt-5 '>
                 <AccountBoxIcon/>
-                <span className='font-semibold'>Donate Us</span>
+                <span className='hidden sm:block font-semibold'>Donate Us</span>
                 </div>
-                </Link>
+                </Link> 
            
-                <div className='flex gap-1 px-4 pt-5 ' onClick={handleLogout}>
+                 <div className='flex gap-1 sm:px-4 px-2 pt-5 ' onClick={handleLogout}>
                 <LogoutOutlinedIcon />
-                <span className='font-semibold'>Logout</span>
+                <span className='hidden sm:block font-semibold'>Logout</span>
                 </div>
                 
                
             </div>
+
+            <CreatePostModel
+            isCreatePostModelOpen={isCreatePostModelOpen}
+            setIsCreatePostModelOpen={setIsCreatePostModelOpen}/>
         </div>
     )
 }
