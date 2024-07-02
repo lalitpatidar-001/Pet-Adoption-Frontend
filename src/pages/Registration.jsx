@@ -3,6 +3,11 @@ import { Link, json, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import axiosInstance from '../axios';
 import {toast} from "react-hot-toast"
+import cover_photo from "../assets/cover-registration.jpg"
+import Inputbox from '../shared/Inputbox';
+import ButtonPrimary from '../shared/ButtonPrimary';
+import AuthActions from '../shared/AuthActions';
+import AuthHeader from '../shared/AuthHeader';
 function Registration() {
     const navigate = useNavigate();
 
@@ -24,50 +29,96 @@ function Registration() {
 
     const handleSubmitSignUp = async (e) => {
         e.preventDefault();
-        setIsLoading(true);
-
         try {
+            setIsLoading(true);
             const response = await axiosInstance.post('/auth/register/', userData);
-            setIsLoading(false);
-            console.log(response.data);
             if (response.status === 201) {
                 toast.success("User Registered Successfully");
                 navigate("/login");
             }
-
         }
         catch (error) {
-            setIsLoading(false);
             if (error.response && error.response.data.msg ) {
                 toast.error(error.response.data.msg)
             } else {
                  toast.error("Something went wrong");
             }
+        }finally{
+            setIsLoading(false)
         }
     }
 
     return (
         // container
-        <div className='flex items-center justify-center h-[100vh] w-[100vw] bg-[#dddddd]'>
+        <div className='flex items-center justify-center h-[100vh]  bg-[#dddddd]'>
             {/* wrapper */}
-            <div className='flex flex-col gap-[20px] bg-white w-fit h-fit p-8  rounded '>
-                <h1 className='text-3xl '>Register here</h1>
+         <div className="flex  max-w-[650px] ">
+
+         <div className="flex-1 hidden sm:block rounded-l-lg overflow-hidden">
+<img className="h-[464px]" src={cover_photo}/>
+          </div>
+          <div className='flex flex-1 flex-col h-[] gap-[20px] bg-white  sm:p-3 p-4 w-full sm:w-[300px] py-8  rounded-r-lg '>
+
+                <AuthHeader
+                heading="Register to Pet-Adoption"
+                message="Welcome, fill details to create account"
+                />
+                {/* <h1 className='text-3xl '>Register here</h1> */}
                 <form onSubmit={handleSubmitSignUp} className='flex flex-col gap-3 '>
-                    <input required className='p-2 border-b-2 outline-none' type="text" placeholder='Full Name'
-                        name='fullname' value={userData.fullname} onChange={handleUserData} />
-                    <input required className='p-2 border-b-2 outline-none' type="text" placeholder='Username'
-                        name='username' value={userData.username} onChange={handleUserData} />
-                    <input required className='p-2 border-b-2  outline-none' type='password' placeholder='Password'
-                        name='password' value={userData.password} onChange={handleUserData} />
-                    <input required className='p-2 border-b-2  outline-none' type='email' placeholder='email address'
-                        name='email' value={userData.email} onChange={handleUserData} />
-                    <input required className='p-2 border-b-2  outline-none' type='number' placeholder='Phone Number '
-                        name='contact' value={userData.contact} onChange={handleUserData} />
-                    <button disabled={isLoading && true} className={`p-2 px-4 border-none bg-[#5551FF] rounded text-white font-semibold w-fit ${isLoading && "bg-[#a9a8e9]"} `} type='submit'>Sign In</button>
-                    <span>already user? <Link to=
-                        "/login"><span className='text-[#5551FF]'>Login here</span></Link></span>
+
+                    <Inputbox
+                    type="text"
+                    name="fullname"
+                    placeholder="Enter fullname"
+                    value={userData.fullname}
+                    onChange={handleUserData}
+                    />
+
+                    <Inputbox
+                    type="text"
+                    placeholder="Enter username"
+                    name="username"
+                    value={userData.username}
+                    onChange={handleUserData}
+                    />
+                    <Inputbox
+                    type="password"
+                    placeholder="Enter password"
+                    name="password"
+                    value={userData.password}
+                    onChange={handleUserData}
+                    />
+                    <Inputbox
+                    type="email"
+                    placeholder="Enter email"
+                    name="email"
+                    value={userData.email}
+                    onChange={handleUserData}
+                    />
+                    <Inputbox
+                    type="email"
+                    placeholder="Enter Phone Number"
+                    name="contact"
+                    value={userData.contact}
+                    onChange={handleUserData}
+                    />
+            
+            <ButtonPrimary 
+            isLoading={isLoading
+            }
+            title="Sign Up"
+            type="submit"
+            />
+                   
+                    <AuthActions
+                    path="/login"
+                    message="Already user?"
+                    text="Login here"
+                    />
                 </form>
             </div>
+
+         </div>
         </div>
     )
 }

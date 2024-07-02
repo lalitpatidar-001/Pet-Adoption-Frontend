@@ -58,6 +58,7 @@ function Home() {
           isCreateOpened={isCreateOpened} setIsCreateOpened={setIsCreateOpened} />
 
         {isPostLoading ? <span>Loading...</span> : <Pets />}
+        
         <Filters
           onFilterChange={handleFilterChange}
           isPostLoading={isPostLoading} setIsPostLoading={setIsPostLoading} />
