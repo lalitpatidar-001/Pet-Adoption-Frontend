@@ -96,7 +96,7 @@ function Registration() {
                     onChange={handleUserData}
                     />
                     <Inputbox
-                    type="email"
+                    type="number"
                     placeholder="Enter Phone Number"
                     name="contact"
                     value={userData.contact}
