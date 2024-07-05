@@ -10,6 +10,8 @@ import { userContext } from '../context/UserContextProvider';
 import axiosInstance from '../axios';
 import {toast} from "react-hot-toast"
 import CreatePostModel from './models/CreatePostModel';
+import TextsmsIcon from '@mui/icons-material/Textsms';
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 
 function SideBar( {page}) {
     const [isCreatePostModelOpen , setIsCreatePostModelOpen] = useState(false);
@@ -78,13 +80,13 @@ function SideBar( {page}) {
                 </Link>
                 <Link to={`/chat/${User}`}>
                 <div className='flex gap-1 sm:px-4 px-2 pt-5 '>
-                <AccountBoxIcon/>
+                <TextsmsIcon/>
                 <span className='hidden sm:block font-semibold'>Conversations</span>
                 </div>
                 </Link>
                 <Link to={`/donate`}>
                 <div className='flex gap-1 sm:px-4 px-2 pt-5 '>
-                <AccountBoxIcon/>
+                <VolunteerActivismIcon/>
                 <span className='hidden sm:block font-semibold'>Donate Us</span>
                 </div>
                 </Link> 
