@@ -4,7 +4,6 @@ import Pets from '../components/Pets'
 import Filters from '../components/Filters'
 import SideBar from '../components/SideBar'
 import CreatePost from '../components/CreatePost'
-import BlackScreen from '../components/BlackScreen'
 import { useDispatch, useSelector } from 'react-redux'
 import { addAllPets } from '../redux/slices/petSlice'
 import { connectSocket, socket } from '../socket'
@@ -30,7 +29,6 @@ function Home() {
 
   };
 
-  console.log("rendering home")
   useEffect(() => {
     if (isCreateOpened) {
       document.body.classList.add('overflow-hidden');
@@ -47,20 +45,7 @@ function Home() {
     <>
       {/* <Navbar page="home"/> */}
       <div className={`flex justify-between  gap-[2px] w-[100vw]  py-1 sm:pl-0 pl-[1px]  top-0 `}>
-        {/* {isCreateOpened && <BlackScreen isCreateOpened={isCreateOpened} setIsCreateOpened={setIsCreateOpened} />}
-        {isCreateOpened &&
-          <CreatePost
-            isCreateOpened={isCreateOpened} setIsCreateOpened={setIsCreateOpened}
-            isPostLoading={isPostLoading} setIsPostLoading={setIsPostLoading}
-          />} */}
-
-          
-
-        {/* <SideBar
-          isCreateOpened={isCreateOpened} setIsCreateOpened={setIsCreateOpened} /> */}
-
-          
-
+ 
         {isPostLoading ? <span>Loading...</span> : <Pets />}
         
         <Filters
