@@ -61,7 +61,7 @@ function CreatePost({  handleClose,setIsPostLoading }) {
       })
       setImage(null);
       setIsNoFeeChecked(false);
-      setIsCreateOpened(false);
+      handleClose();
     } catch (error) {
       console.error('Error:', error);
       // Handle error (show a message to the user, etc.)

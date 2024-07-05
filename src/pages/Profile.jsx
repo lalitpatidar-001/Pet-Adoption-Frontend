@@ -6,11 +6,10 @@ import Pet from '../components/Pet';
 import PetProfile from '../components/PetProfile';
 import EditProfile from '../components/EditProfile';
 import CancelIcon from '@mui/icons-material/Cancel';
-import BGCreatePost from '../components/BGCreatePost';
 import { useParams } from 'react-router-dom';
 import { userContext } from '../context/UserContextProvider';
 import axios from 'axios';
-import CenteredTabs from '../components/Tab';
+
 import Posts from '../components/profile/Posts';
 import Adoptions from '../components/profile/Adoptions';
 import Wishlists from '../components/profile/Wishlists';
@@ -18,6 +17,7 @@ import axiosInstance, { STATIC_PATH } from '../axios';
 import {toast} from "react-hot-toast"
 import {useNavigate} from "react-router-dom";
 import EditProfileModel from '../components/models/EditProfileModel';
+import CenteredTabs from '../shared/Tab';
 const dumyUrl = "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=600";
 
 function Profile() {
@@ -110,13 +110,7 @@ function Profile() {
         };
     }, [isEditClicked]);
 
-    // let tabComponent = <Posts userPosts={userPosts} />
-    // switch (value) {
-    //     case 0:
-    //         return <Posts userPosts={userPosts} />
-    //     default:
-    //         return
-    // }
+ 
     return (
         // container
         <>

@@ -66,12 +66,16 @@ function Login() {
                 localStorage.setItem("user-data", JSON.stringify(userId));
                 userId = userId.replace(/"/g, '');
                 setUser(userId);
+                toast.success("user logged in successfully")
                 navigate("/");
+
             }
         }
         catch (error) {
-            console.log(error);
-            if (error.response && error.response.data.msg) {
+            if(error?.response?.status=== 400 && error?.response?.data?.errors[0]?.msg){
+                toast.error(error?.response?.data?.errors[0]?.msg);
+            }
+            else if (error.response && error.response.data.msg) {
                 // setError(error.response.data.msg);
                 toast.error(error.response.data.msg)
             } else {
