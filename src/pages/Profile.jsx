@@ -1,10 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import SideBar from '../components/SideBar';
 import Pet from '../components/Pet';
 import PetProfile from '../components/PetProfile';
-import EditProfile from '../components/EditProfile';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useParams } from 'react-router-dom';
 import { userContext } from '../context/UserContextProvider';
@@ -18,15 +16,17 @@ import {toast} from "react-hot-toast"
 import {useNavigate} from "react-router-dom";
 import EditProfileModel from '../components/models/EditProfileModel';
 import CenteredTabs from '../shared/Tab';
-const dumyUrl = "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=600";
+import LoaderBox from '../shared/LoaderBox';
+import ProfileCard from '../components/profile/ProfileCard';
+
 
 function Profile() {
     const { id } = useParams();
     const [isEditProfileModelOpen , setIsEditProfileModelOpen] = useState(false)
+    const [postCount , setPostCount] = useState(0);
     const [userPosts, setUserPosts] = useState([]);
     const { User, setUser } = useContext(userContext);
     const [userData, setUserData] = useState("");
-    const [isEditClicked, setIsEditClicked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [profileImageURL, setProfileImageURL] = useState(null);
     const [value, setValue] = useState(0);
@@ -64,83 +64,42 @@ function Profile() {
     useEffect(() => {
         if(isLoading) return
         setProfileImageURL(() => {
-            console.log("userData?.profileImage",userData?.profileImage)
+            // no profile image
             if(!userData?.profileImage) return null
 
             if(userData?.profileImage?.startsWith("profiles/")){ 
-                console.log("running")
                 const imageAddress = userData.profileImage
                 const imageUrl = `${STATIC_PATH + imageAddress}`;
-                console.log("profileImageURL", profileImageURL);
-                console.log("userData", userData);
                 return imageUrl
             }
-           
-            console.log("running")
-            console.log(userData?.profileImage)
             return null
            
         })
     }, [userData])
 
-    useEffect(() => {
-        async function getUserPosts(userId) {
-            try {
-                const response = await axiosInstance.get(`/post/getall/${userId}`);
-                console.log("response ", response)
-                console.log("response data", response.data);
-                setUserPosts(response.data.posts);
-            } catch (error) {
-                console.log(error);
+ 
 
-            }
-        };
-        if (id) { getUserPosts(id); }
-    }, [id])
-
-    useEffect(() => {
-        if (isEditClicked) {
-            document.body.classList.add('overflow-hidden');
-        } else {
-            document.body.classList.remove('overflow-hidden');
-        }
-
-        return () => {
-            document.body.classList.remove('overflow-hidden');
-        };
-    }, [isEditClicked]);
-
+   
+    if(isLoading) return <LoaderBox customWidth="flex-[5]"/>
  
     return (
         // container
         <>
-            {isLoading ? <span>Loading...</span> :
+           
                 <div className='flex relative overflow-hidden w-full'>
-
-                    
 
                     <div className='flex  flex-col  w-full items-center bg-[#dddddd]  min-h-[100vh] p-2'>
                         {/* wrapper */}
 
                         <div className='  bg-white p-4 flex flex-col items-center w-full '>
                             {/* profile */}
-                            <div className='flex p-5 pl-5 lg:gap-[40px] justify-center ' >
-
-                                <img className='sm:w-[100px] sm:h-[100px] h-[60px] w-[60px] rounded-[50%]' src={profileImageURL?
-                                    profileImageURL : dumyUrl} alt="profile-image" />
-
-                                <div className='sm:px-4 px-2 py-2 flex flex-col'>
-                                    <h1 className='text-xl font-semibold'>{userData.username}</h1>
-                                    <span className='font-semibold'>{userPosts.length}post</span>
-                                    {userData._id === User &&
-                                        <span onClick={() => setIsEditProfileModelOpen(!isEditClicked)} className=' mt-2 font-bold rounded text-center cursor-pointer bg-[#dddddd]'>Edit Profile</span>
-                                    }
-                                </div>
-                                {/* options */}
-                                <div className='py-2 cursor-pointer'>
-                                    <MoreHorizIcon />
-                                </div>
-                            </div>
+                            <ProfileCard
+                                profileImageURL={profileImageURL}
+                                userPosts={userPosts}
+                                userData={userData}
+                                setIsEditProfileModelOpen={setIsEditProfileModelOpen}
+                                postCount={postCount}
+                            />
 
                             {/* switch tabs */}
                             <CenteredTabs id={id} User={User} value={value} setValue={setValue} />
@@ -148,7 +107,7 @@ function Profile() {
 
                             {/* posts */}
                             <div className='flex flex-col items-center gap-2 w-full max-w-[500px] border-t-2'>
-                                {value === 0 && <Posts userPosts={userPosts} />}
+                                {value === 0 && <Posts setPostCount={setPostCount}  />}
                                 {value === 1 && <Adoptions />}
                                 {User === id && (value === 2 && <Wishlists id={id} />)}
                             </div>
@@ -163,7 +122,6 @@ function Profile() {
                     />
                 </div>
                 
-                }
 
         </>
     )

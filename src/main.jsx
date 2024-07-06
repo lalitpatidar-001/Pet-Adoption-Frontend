@@ -16,6 +16,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           </ReduxProvider>
         </React.StrictMode>
       </UserContextProvider>
-    <Toaster />
+      <Toaster />
   </>
 )

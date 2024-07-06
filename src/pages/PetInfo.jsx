@@ -24,24 +24,27 @@ function PetInfo() {
     const imageAddress = postData.image?.replace(/\\/g, '/');
     const imageURL = `${STATIC_PATH + imageAddress}`;
 
-    console.log("isAlreadyRequested", isAlreadyRequested)
-    console.log("isAlreadyRequested", isAlreadyRequested)
     useEffect(() => {
         async function getPostData(postId) {
             try {
                 const response = await axiosInstance.get(`/post/get/${postId}`);
-                console.log(response)
-                console.log("post data", response.data.post)
-                setPostData(response.data.post)
+                if(response.status===200){
+                    setPostData(response.data.post)
+                }
             } catch (error) {
-                console.log(error)
+                if(error?.response.status && error?.response?.data.msg ){
+                        toast.error(error?.response?.data.msg);
+                        navigate("/")
+                }else{
+                    toast.error("something went wrong on server");
+                    navigate("/")
+                }
             }
         }
         getPostData(id);
     }, [id])
 
     useEffect(() => {
-        console.log(requests)
         setIsAlreadyRequested(requests.some(item => item.pet._id === id))
     }, [requests, id])
 
@@ -71,16 +74,14 @@ function PetInfo() {
                     memberTwo: postData.userId
                 });
             if (response.status === 200) {
-                // chat already exist
-                console.log(" chat exists")
+                // chat already exists
                 dispatch(setCurrentChat({ data: response.data.data }));
                 navigate(`/chat/${User}`);
             }
             if (response.status === 201) {
                 // new chat created
-                console.log("new chat created")
-                dispatch(updateChats({ data: response.data.data }));
                 dispatch(setCurrentChat({ data: response.data.data }));
+                dispatch(updateChats({ data: response.data.data }));
                 navigate(`/chat/${User}`);
             }
             console.log(response);

@@ -5,13 +5,16 @@ import { userContext } from '../context/UserContextProvider';
 import { useDispatch } from "react-redux";
 import { updatePets } from '../redux/slices/petSlice';
 import axiosInstance, { urlPath } from '../axios';
+import { handleCreatePostValidation } from '../utils/validations/postValidation';
+import ValidationFeedback from '../shared/ValidationFeedback';
+import {toast} from "react-hot-toast"
 
-
-function CreatePost({  handleClose,setIsPostLoading }) {
+function CreatePost({  handleClose }) {
+  const [isLoading , setIsLoading] = useState(false)
   const { User } = useContext(userContext);
   const dispatch = useDispatch();
   const [isNoFeeChecked, setIsNoFeeChecked] = useState(false);
-
+  const [errors,setErrors] = useState({})
   const [image, setImage] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -25,7 +28,13 @@ function CreatePost({  handleClose,setIsPostLoading }) {
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-    // Prepare the form data
+    setErrors({})
+    const result = handleCreatePostValidation(formData,image,isNoFeeChecked);
+    setErrors(result)
+    // call api only if data is valid
+    if(Object.keys(result).length===0) {
+
+      // Prepare the form data
     const postData = new FormData();
     postData.append('name', formData.name);
     postData.append('type', formData.type);
@@ -38,6 +47,7 @@ function CreatePost({  handleClose,setIsPostLoading }) {
     console.log(postData);
     try {
       // setIsPostLoading(true)
+      setIsLoading(true);
       const response = await axios.post(`${urlPath}/api/post/createpost/${User}`, postData,
         {
           headers:{
@@ -46,29 +56,37 @@ function CreatePost({  handleClose,setIsPostLoading }) {
         }
       );
 
-      // Handle the response, you can log it for now
-      console.log('API Response:', response.data.post);
-      dispatch(updatePets({ data: response.data.post }))
+     if(response.status === 201){
+       dispatch(updatePets({ data: response.data.post }));
+       toast.success("Post created successfully");
+       // Reset the form after successful submission
+       setFormData({
+         name: '',
+         type: '',
+         breed: '',
+         age: '',
+         gender: 'male',
+         price: '',
+       })
+       setImage(null);
+       setIsNoFeeChecked(false);
+       handleClose();
+     }
 
-      // Reset the form after successful submission
-      setFormData({
-        name: '',
-        type: '',
-        breed: '',
-        age: '',
-        gender: 'male',
-        price: '',
-      })
-      setImage(null);
-      setIsNoFeeChecked(false);
-      handleClose();
     } catch (error) {
       console.error('Error:', error);
-      // Handle error (show a message to the user, etc.)
+      if(error.response?.data?.msg){
+        toast.error(error.response?.data?.msg)
+      }else{
+        toast.error("something went wrong on server")
+      }
     }
     finally {
-      setIsPostLoading(false)
+      setIsLoading(false)
     };
+    }
+
+    
   }
 
   const handleInputChange = (e) => {
@@ -95,10 +113,14 @@ function CreatePost({  handleClose,setIsPostLoading }) {
             {!image ? 'Choose Image' : <img className='w-[100%] ' src={URL.createObjectURL(image)} alt='' />}
           </label>
 
-          <input className='w-[1px] h-[1px]' name='postImage' required type='file' id='choose-image' onChange={(e) => setImage(e.target.files[0])} />
+          <input className='w-[1px] h-[1px]' name='postImage' 
+          // required 
+          type='file' id='choose-image' onChange={(e) => setImage(e.target.files[0])} />
+          <ValidationFeedback text={errors?.image}/>
 
         </div>
         <div className='flex gap-[10px] flex-col sm:flex-row '>
+          <div className="flex flex-col ">
           <div className="flex items-center justify-between w-full gap-3">
             <label htmlFor='name'>Name </label>
             <input
@@ -111,8 +133,12 @@ function CreatePost({  handleClose,setIsPostLoading }) {
               placeholder='enter pet name'
             />
           </div>
+          <ValidationFeedback text={errors?.name}/>
+          </div>
+
+           <div className="flex flex-col">
           <div className="flex items-center justify-between w-full gap-3">
-            <label htmlFor='type'>Type </label>
+           <label htmlFor='type'>Type </label>
             <input
               className='border-2 p-1 rounded'
               required
@@ -122,9 +148,12 @@ function CreatePost({  handleClose,setIsPostLoading }) {
               onChange={handleInputChange}
               placeholder='enter pet type'
             />
+           </div>
+        <ValidationFeedback text={errors?.type}/>
           </div>
         </div>
         <div className='flex gap-[10px] flex-col sm:flex-row'>
+          <div className="flex flex-col">
           <div className="flex items-center justify-between w-full gap-3">
             <label htmlFor='breed'>Breed </label>
             <input
@@ -137,6 +166,9 @@ function CreatePost({  handleClose,setIsPostLoading }) {
               placeholder='enter pet breed'
             />
           </div>
+            <ValidationFeedback text={errors?.breed}/>
+          </div>
+          <div className="flex flex-col ">
           <div className="flex items-center justify-between w-full gap-3">
             <label htmlFor='age'>Age </label>
             <input
@@ -148,6 +180,8 @@ function CreatePost({  handleClose,setIsPostLoading }) {
               onChange={handleInputChange}
               placeholder='enter pet age'
             />
+          </div>
+            <ValidationFeedback text={errors?.age}/>
           </div>
         </div>
         <div className='flex sm:gap-[75px] flex-col sm:flex-row w-full justify-around '>
@@ -189,8 +223,9 @@ function CreatePost({  handleClose,setIsPostLoading }) {
                 value={formData.price}
                 onChange={handleInputChange}
                 placeholder='enter adoption price'
-                {...(isNoFeeChecked ? {} : { required: true })}
+                {...(isNoFeeChecked ? {} : { required: null })}
               />
+              <ValidationFeedback text={errors?.price}/>
             </div>
             <div>
               <label htmlFor='noFee'>No Fee </label>
@@ -213,10 +248,13 @@ function CreatePost({  handleClose,setIsPostLoading }) {
           Cancel
         </button>
         <button
+        disabled={isLoading}
           type='submit'
-          className='bg-[#1877F2] text-white px-8 py-1 rounded font-semibold cursor-pointer'
+          className={`
+            ${isLoading&&"bg-blue-300"}
+            bg-[#1877F2] text-white px-8 py-1 rounded font-semibold cursor-pointer`}
         >
-          Post
+          {isLoading?"uploading...":"Post"}
         </button>
         </div>
       </form>
