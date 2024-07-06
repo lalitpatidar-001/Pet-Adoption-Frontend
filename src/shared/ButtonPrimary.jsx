@@ -7,7 +7,7 @@ const ButtonPrimary = ({
 
 }) => {
   return (
-   <button disabled={isLoading} className={`bg-[#101010] rounded-[8px] w-full font-bold text-white p-2 ${isLoading && "bg-[#a9a8e9]"}`} type={type}>
+   <button disabled={isLoading} className={`bg-[#101010] rounded-[8px] w-full font-bold text-white p-2 ${isLoading && "bg-[#a9a8e9] cursor-not-allowed"}`} type={type}>
                         {title}
                     </button>
   )

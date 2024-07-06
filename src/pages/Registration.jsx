@@ -9,7 +9,7 @@ import ButtonPrimary from '../shared/ButtonPrimary';
 import AuthActions from '../shared/AuthActions';
 import AuthHeader from '../shared/AuthHeader';
 import ValidationFeedback from '../shared/ValidationFeedback';
-import { handleRegisterationValidation } from '../utils/auth-validation/validation';
+import { handleRegisterationValidation } from '../utils/validations/validation';
 
 const initalValue =
     {
@@ -19,6 +19,7 @@ const initalValue =
         email: "",
         contact: ""
     };
+    
 function Registration() {
     const navigate = useNavigate();
     const [userData, setUserData] = useState(initalValue);

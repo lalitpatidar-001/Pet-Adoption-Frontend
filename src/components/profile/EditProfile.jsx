@@ -1,9 +1,12 @@
 import React, { useContext, useState } from 'react';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { userContext } from '../context/UserContextProvider';
+import { userContext } from '../../context/UserContextProvider';
 import axios from 'axios';
-import axiosInstance, { urlPath } from '../axios';
-
+import axiosInstance, { urlPath } from '../../axios';
+import { editProfileValidation } from '../../utils/validations/profileValidation';
+import ValidationFeedback from '../../shared/ValidationFeedback';
+import {toast} from "react-hot-toast"
+import LoaderBox from '../../shared/LoaderBox';
 const initialState ={
     name: "",
     username: "",
@@ -16,41 +19,66 @@ function EditProfile({ id,handleClose }) {
     const [isLoading, setIsLoading] = useState(false);
     const [profileImage, setprofileImage] = useState(null);
     const [details, setDetails] = useState(initialState);
-
+    const [errors ,setErrors] = useState(false);
     const { User } = useContext(userContext);
+
+    function hasNonEmptyString(details) {
+        return Object.values(details).some(value => typeof value === 'string' && value.trim() !== '');
+    }
 
     const handleProfileChangeSubmit = async (e) => {
         e.preventDefault();
+        // validate data
+        const result = editProfileValidation(details);
+        setErrors(result) // set errors
 
-        try {
-            const formData = new FormData();
-            formData.append('fullname', details.name);
-            formData.append('username', details.username);
-            formData.append('gender', details.selectedGender);
-            formData.append('address', details.address);
-            formData.append('DOB', details.dob);
-            formData.append('profileImage', profileImage);
-            console.log(formData)
-            setIsLoading(true)
-            const response = await axios.post(`${urlPath}/api/user/update?id=${id}`, formData,{
-                headers:{
-                    "Content-Type":"multipart/form-data"
+        // validate atleast one field is filled
+        const isOneInputIsNotEmpty = hasNonEmptyString(details) ||!!profileImage
+
+
+
+        if(!isOneInputIsNotEmpty){
+            return toast.error("atlesat fill one field to update");
+        }
+
+        if(Object.keys(result).length===0 && isOneInputIsNotEmpty ){
+            try {
+                const formData = new FormData();
+                formData.append('fullname', details.name);
+                formData.append('username', details.username);
+                formData.append('gender', details.selectedGender);
+                formData.append('address', details.address);
+                formData.append('DOB', details.dob);
+                formData.append('profileImage', profileImage);
+
+                setIsLoading(true)
+                const response = await axios.post(`${urlPath}/api/user/update?id=${id}`, formData,{
+                    headers:{
+                        "Content-Type":"multipart/form-data"
+                    }
+                });
+
+                if(response.status===200){
+                    // reseting data
+                    setprofileImage(null);
+                    setDetails(initialState);
+                    handleClose(true)
+                    toast.success("Profile updated Successfully")
                 }
-            });
-            setIsLoading(false);
-            // reseting data
-            setprofileImage(null);
-            setDetails(initialState);
-            handleClose(true)
-
-
-
-        } catch (error) {
-            console.error('Error updating user profile:', error);
+            
+            } catch (error) {
+                console.error('Error updating user profile:', error);
+                if(error.response?.data?.msg){
+                    toast.error(error.response?.data?.msg);
+                }else{
+                    toast.error("something went wrong on server");
+                }
+            }
+            finally {
+               setIsLoading(false);
+            }
         }
-        finally {
-            // setIsEditClicked(false)
-        }
+        
     };
 
     const handleChange = (e) => {
@@ -58,7 +86,7 @@ function EditProfile({ id,handleClose }) {
         setDetails((prev) => ({ ...prev, [name]: value }));
     };
 
-    if(isLoading) return <span>Loading...</span> 
+    if(isLoading) return <LoaderBox customWidth="w-full"/> 
 
     return (<>
 
@@ -81,10 +109,12 @@ function EditProfile({ id,handleClose }) {
                         <div className='flex flex-col'>
                             <label className='font-semibold' htmlFor="name">Name </label>
                             <input onChange={handleChange} value={details.name} name='name' className='border-b-2 border-black p-1 rounded bg-transparent outline-none  ' type="text" placeholder='Enter pet name' />
+                            <ValidationFeedback text={errors.name}/>
                         </div>
                         <div className='flex flex-col'>
                             <label className='font-semibold' htmlFor="username">Username</label>
                             <input onChange={handleChange} value={details.username} name='username' className='border-b-2 border-black p-1 rounded bg-transparent outline-none  ' type="text" placeholder='Enter new username' />
+                            <ValidationFeedback text={errors.username}/>
                         </div>
                     </div>
 

@@ -14,12 +14,12 @@ import { addAllWishlists, deleteWishlist, updateWishlist } from '../redux/slices
 import toast from 'react-hot-toast';
 import axiosInstance, { STATIC_PATH } from '../axios';
 
-function Pet({ _id, name, type, breed, age, gender, price, isNoFee, userId, image, status }) {
+function Pet({ _id, name, type, breed, age, gender, price, isNoFee, userId, image, status,likes }) {
   const dispatch = useDispatch();
   const { wishlists } = useSelector(state => state.wishlist);
   const [isPostSaved, setIsPostSaved] = useState(wishlists?.some(item => item.post._id === _id));
   const { User } = useContext(userContext);
-  const [isPostLike, setIsPostLike] = useState(false);
+  const [isPostLike, setIsPostLike] = useState(likes?.includes(User));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const imageAddress = image?.replace(/\\/g, '/');
@@ -33,16 +33,8 @@ function Pet({ _id, name, type, breed, age, gender, price, isNoFee, userId, imag
   }, [wishlists])
 
   useEffect(() => {
-    async function getIslike(userId, _id) {
-      try {
-        const response = await axiosInstance.get(`/post/islike/${User}?postId=${_id}`);
-        setIsPostLike(response.data.isLike);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getIslike(userId, _id);
-  }, [User, userId, _id]);
+    setIsPostLike(likes?.includes(User))
+  }, [userId._id,_id]);
 
   const handleLikeButton = async () => {
     try {
